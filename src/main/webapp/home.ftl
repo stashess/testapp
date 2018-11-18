@@ -41,6 +41,95 @@
             </div>
         </div>
     </div>
+
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <div class="container">
+        <h4>SQL queries</h4>
+
+        <div class="container">
+            <h4>Query 1</h4>
+            <div class="card">
+                <div class="card-body">
+                    SELECT customers.customername,SUM(PAYMENTS.amount) <br/>
+                    FROM CUSTOMERS LEFT JOIN PAYMENTS ON CUSTOMERS.customernumber = PAYMENTS.customernumber <br/>
+                    GROUP BY CUSTOMERS.customername; <br/>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <h4>Query 2</h4>
+            <div class="card">
+                <div class="card-body">
+                    <span>
+                        SELECT OFFICES.officecode,COUNT(*) <br/>
+                        FROM ORDERS <br/>
+                        LEFT JOIN CUSTOMERS ON ORDERS.customernumber = CUSTOMERS.customernumber <br/>
+                        LEFT JOIN employees ON CUSTOMERS.salesrepemployeenumber = employees.employeenumber <br/>
+                        LEFT JOIN OFFICES ON  employees.officecode = OFFICES.officecode <br/>
+                        GROUP BY OFFICES.officecode <br/>
+                        ORDER BY 2 DESC <br/>
+                        LIMIT 1; <br/>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <h4>Query 3</h4>
+            <div class="card">
+                <div class="card-body">
+                    <span>
+                        SELECT PRODUCTS.productname,COUNT(*) <br/>
+                        FROM PRODUCTS <br/>
+                        LEFT JOIN ORDERDETAILS ON ORDERDETAILS.productcode = PRODUCTS.productcode <br/>
+                        GROUP BY PRODUCTS.productcode <br/>
+                        ORDER BY 2 DESC <br/>
+                        LIMIT 1; <br/>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <h4>Query 4</h4>
+            <div class="card">
+                <div class="card-body">
+                    <span>
+                    SELECT a.officecode,(a.sum - b.sum) as pureincome <br/>
+                    FROM((SELECT OFFICES.officecode,SUM(PRODUCTS.BUYPRICE * ORDERDETAILS.quantityordered) <br/>
+                          FROM OFFICES <br/>
+                          LEFT JOIN employees ON  employees.officecode = OFFICES.officecode <br/>
+                          LEFT JOIN CUSTOMERS ON CUSTOMERS.salesrepemployeenumber = employees.employeenumber <br/>
+                          LEFT JOIN ORDERS ON CUSTOMERS.customernumber = ORDERS.customernumber <br/>
+                          LEFT JOIN ORDERDETAILS ON ORDERDETAILS.ordernumber = ORDERS.ordernumber <br/>
+                          LEFT JOIN PRODUCTS ON ORDERDETAILS.productcode = PRODUCTS.productcode <br/>
+                          WHERE ORDERS.shippeddate >='2004-03-02' AND ORDERS.shippeddate <= '2005-06-07' <br/>
+                          GROUP BY OFFICES.officecode) b <br/>
+                    CROSS JOIN <br/>
+                    (SELECT OFFICES.officecode,SUM(ORDERDETAILS.priceeach * ORDERDETAILS.quantityordered) <br/>
+                     FROM OFFICES <br/>
+                     LEFT JOIN employees ON  employees.officecode = OFFICES.officecode <br/>
+                     LEFT JOIN CUSTOMERS ON CUSTOMERS.salesrepemployeenumber = employees.employeenumber <br/>
+                     LEFT JOIN ORDERS ON CUSTOMERS.customernumber = ORDERS.customernumber <br/>
+                     LEFT JOIN ORDERDETAILS ON ORDERDETAILS.ordernumber = ORDERS.ordernumber <br/>
+                     WHERE ORDERS.shippeddate >='2004-03-02' AND ORDERS.shippeddate <= '2005-06-07' <br/>
+                     GROUP BY OFFICES.officecode) a <br/>
+                    ) <br/>
+                    WHERE a.officecode = b.officecode <br/>
+                    ORDER BY 2 DESC <br/>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <script>
